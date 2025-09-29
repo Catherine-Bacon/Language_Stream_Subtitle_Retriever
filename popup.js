@@ -19,8 +19,12 @@
             background-color: #e50914;
             transition: background-color 0.15s ease-in-out;
         }
-        .btn-netflix:hover {
+        .btn-netflix:hover:not(:disabled) {
             background-color: #b20707;
+        }
+        .btn-netflix:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -49,31 +53,42 @@
          * Sends a message to the background service worker to fetch the current status.
          */
         function updateStatusDisplay() {
+            // Get the current status from the background script
             chrome.runtime.sendMessage({ action: "getStatus" }, (response) => {
+                if (chrome.runtime.lastError) {
+                    statusElement.textContent = "Error communicating with background service.";
+                    return;
+                }
+                
                 if (response && response.status) {
                     statusElement.textContent = response.status;
                     
-                    // Simple logic to change color based on content
-                    if (response.status.includes('Monitoring')) {
+                    const statusText = response.status;
+
+                    // Reset all status-specific classes
+                    statusElement.classList.remove('bg-blue-900', 'text-blue-200', 'bg-green-900', 'text-green-200');
+                    statusElement.classList.add('bg-gray-800', 'text-gray-300'); // Default color
+
+                    // Update UI based on the fetched status
+                    if (statusText.includes('Monitoring')) {
+                        statusElement.classList.remove('bg-gray-800', 'text-gray-300');
                         statusElement.classList.add('bg-blue-900', 'text-blue-200');
-                        statusElement.classList.remove('bg-gray-800', 'text-gray-300', 'bg-green-900', 'text-green-200');
                         startButton.disabled = true;
                         startButton.textContent = "Monitoring Active (Play Video)";
-                    } else if (response.status.includes('Download started') || response.status.includes('found')) {
+                    } else if (statusText.includes('Download started') || statusText.includes('found')) {
+                        statusElement.classList.remove('bg-gray-800', 'text-gray-300');
                         statusElement.classList.add('bg-green-900', 'text-green-200');
-                        statusElement.classList.remove('bg-gray-800', 'text-gray-300', 'bg-blue-900', 'text-blue-200');
                         startButton.disabled = false;
                         startButton.textContent = "Restart Monitoring";
                     } else {
-                         // Default / Ready state
-                        statusElement.classList.remove('bg-blue-900', 'text-blue-200', 'bg-green-900', 'text-green-200');
-                        statusElement.classList.add('bg-gray-800', 'text-gray-300');
+                        // Ready or Error state
                         startButton.disabled = false;
                         startButton.textContent = "Start Monitoring";
                     }
 
                 } else {
                     statusElement.textContent = "Error: Could not retrieve status.";
+                    startButton.disabled = false;
                 }
             });
         }
@@ -88,13 +103,18 @@
                     return;
                 }
 
+                // *** UX Improvement: Immediate Feedback ***
+                statusElement.textContent = "Attempting to start monitoring...";
+                startButton.disabled = true;
+
                 chrome.runtime.sendMessage({ action: "startMonitoring" }, (response) => {
-                    if (response.success) {
-                        // Once monitoring is started, update the UI
-                        updateStatusDisplay();
-                    } else {
-                        statusElement.textContent = `Error: ${response.message || "Failed to start monitoring."}`;
+                    if (chrome.runtime.lastError || !response || !response.success) {
+                        statusElement.textContent = `Error: Failed to start monitoring.`;
+                        startButton.disabled = false;
                     }
+                    // The background script immediately updates its status in storage.
+                    // We call the full update function to read that new status.
+                    updateStatusDisplay();
                 });
             });
         });
@@ -102,8 +122,8 @@
         // Update the status display when the popup is opened
         updateStatusDisplay();
 
-        // Optional: Set up an interval to refresh status if the user keeps the popup open
-        setInterval(updateStatusDisplay, 1500);
+        // Set up an interval to refresh status in case the download completes while the popup is open
+        setInterval(updateStatusDisplay, 1000);
 
     </script>
 </body>
