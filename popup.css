@@ -1,0 +1,71 @@
+/* --- File start: popup.css --- */
+body {
+    width: 300px;
+    font-family: Arial, sans-serif;
+    padding: 0;
+    margin: 0;
+    background-color: white; /* SETS THE BACKGROUND TO WHITE for readability */
+    color: #333;
+}
+.p-4 {
+    padding: 1rem;
+}
+h1 {
+    color: #e50914; /* Netflix Red */
+    font-size: 1.5em;
+    margin-bottom: 0.75rem;
+    text-align: center;
+    font-weight: bold;
+}
+p {
+    color: #555;
+    font-size: 0.75rem;
+}
+/* Styles for the Status Box */
+#status {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 1rem;
+    color: #333;
+    font-size: 0.9em;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    /* Ensure status text is vertically centered */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px; 
+}
+
+/* Base Button Style */
+#startButton {
+    background-color: #e50914;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    transition: background-color 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+#startButton:hover:not(:disabled) {
+    background-color: #b20707;
+}
+#startButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+/* Optional: Coloring for status messages (can be set via class in popup.js) */
+.monitoring {
+    background-color: #e6f7ff; /* Light blue for monitoring */
+    color: #007bff;
+    border-color: #91d5ff;
+}
+.ready {
+    background-color: #f6ffed; /* Light green for ready/success */
+    color: #52c41a;
+    border-color: #b7eb8f;
+}
