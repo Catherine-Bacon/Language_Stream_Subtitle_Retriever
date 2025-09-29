@@ -1,29 +1,24 @@
 {
-  "name": "Language Stream",
-  "description": "Base Level Extension",
+  "name": "TTML Subtitle Downloader",
+  "description": "Monitors Netflix network traffic to find and download TTML subtitle files.",
   "version": "1.0",
   "manifest_version": 3,
   "action": {
     "default_popup": "popup.html", 
-    "default_icon": "logo.png"
+    "default_icon": "logo.jpg"
   },
-  "content_scripts": [
-    {
-      "matches": ["*://*.netflix.com/*"],
-      "js": ["content.js"],
-      "run_at": "document_idle"
-    }
-  ],
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["scripting", "storage", "activeTab", "tabs", "webRequest", "downloads"], 
-  "host_permissions": ["*://*.netflix.com/*", "*://*.nflxvideo.net/*"],
-  "web_accessible_resources": [
-    {
-      "resources": ["inpage.js"],
-      "matches": ["*://*.netflix.com/*"]
-    }
+  "permissions": [
+    "storage", 
+    "tabs", 
+    "webRequest", 
+    "downloads"
+  ], 
+  "host_permissions": [
+    "*://*.netflix.com/*", 
+    "*://*.nflxvideo.net/*"
   ],
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
