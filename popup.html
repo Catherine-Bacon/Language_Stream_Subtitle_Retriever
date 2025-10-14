@@ -2,30 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subtitle Downloader</title>
-    <!-- CRITICAL FIX: Link to local CSS file to satisfy Chrome's CSP -->
+    <title>Netflix Inspector</title>
     <link rel="stylesheet" href="popup.css">
 </head>
 <body>
     <div class="p-4">
-        <h1 class="text-2xl font-bold mb-3 text-center">TTML Subtitle Downloader</h1>
-    
-        <!-- This element displays the current status of the monitoring process -->
-        <div id="status" class="p-3 mb-4 rounded-lg text-center font-medium min-h-[40px] flex items-center justify-center text-sm shadow-md">
+        <h1>Netflix Data Inspector</h1>
+        <div id="status">
             Loading status...
         </div>
-    
-        <button id="startButton" class="w-full text-white font-semibold py-2 px-4 rounded-lg shadow-lg">
-            Start Monitoring
-        </button>
-        
-        <p class="text-xs mt-4 text-center">
-            Ensure you are on a Netflix show page before starting.
+        <p style="text-align: center; margin-top: 1rem;">
+            This tool is now active. Open the service worker console to see intercepted data.
         </p>
     </div>
-
-    <!-- The logic is loaded from popup.js -->
     <script src="popup.js"></script>
 </body>
 </html>
