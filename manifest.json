@@ -1,7 +1,7 @@
 {
   "name": "Netflix Data Inspector",
   "description": "Intercepts and logs Netflix network data to the service worker console for debugging.",
-  "version": "1.1",
+  "version": "1.2",
   "manifest_version": 3,
   "action": {
     "default_popup": "popup.html",
@@ -14,7 +14,8 @@
     {
       "matches": ["*://*.netflix.com/*"],
       "js": ["content_script.js"],
-      "run_at": "document_start"
+      "run_at": "document_start",
+      "world": "MAIN" 
     }
   ],
   "permissions": [
